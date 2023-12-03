@@ -24,6 +24,11 @@
   gap: 10px;
 }
 
+.table {
+  width: 80%;
+  margin: auto;
+}
+
 .pagination {
   margin: 20px 0;
   display: flex;

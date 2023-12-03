@@ -3,12 +3,15 @@ import { Button, Form, Input, Select, Space, DatePicker } from 'antd'
 import useIdentificationCreate from '../hooks/useIdentificationCreate'
 import { Toaster } from 'react-hot-toast'
 import { randomData } from '../const'
+import useIdentificationGet from '../hooks/useIdentificationGet'
+import CountUp from 'react-countup'
 
 const { Option } = Select
 
 const Home = () => {
   const { Submit, isLoadingButton } = useIdentificationCreate()
   const [form] = Form.useForm()
+  const { userData, fetchData } = useIdentificationGet()
 
   const {
     randomIdentification,
@@ -46,7 +49,9 @@ const Home = () => {
     })
   }
 
-  const onFinish = async (values: any) => {
+  const onFinish = async (
+    values: any, // eslint-disable-line
+  ) => {
     const ISOFormatBirthDayDate = new Date(`${values.date_of_birth.$d}`).toISOString()
     const ISOFormatIssueDate = new Date(`${values.date_of_issue.$d}`).toISOString()
     const ISOFormatExpiryDate = new Date(`${values.date_of_expiry.$d}`).toISOString()
@@ -60,6 +65,7 @@ const Home = () => {
     try {
       if (userData !== null) await Submit(userData)
       onReset()
+      await fetchData()
     } catch (error) {
       console.log(error)
     }
@@ -70,6 +76,10 @@ const Home = () => {
       <Toaster />
       <div className={classes.container}>
         <p className={classes.title}>Insert Your Information</p>
+        <div className={classes.totalRecord}>
+          <p>Total Record</p>
+          {userData !== null ? <CountUp className={classes.count} start={0} end={userData.length} /> : null}
+        </div>
         <Form
           name="complex-form"
           onFinish={onFinish}
@@ -191,7 +201,11 @@ const Home = () => {
             <Button type="primary" htmlType="submit">
               {isLoadingButton ? 'Submitting' : 'Submit'}
             </Button>
-            <Button htmlType="button" onClick={onFill} style={{ backgroundColor: '#9ADE7B', marginLeft: '20px' }}>
+            <Button
+              htmlType="button"
+              onClick={onFill}
+              style={{ color: '#fff', backgroundColor: '#9ADE7B', marginLeft: '20px' }}
+            >
               Generate
             </Button>
           </Form.Item>

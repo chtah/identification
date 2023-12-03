@@ -1,11 +1,24 @@
-import UserInfomation from '../components/UserInfomation'
 import useIdentificationGet from '../hooks/useIdentificationGet'
 import { Button, Form, Space, Input, Select, Pagination } from 'antd'
 import classes from './Search.module.css'
 import { useState } from 'react'
+import type { ColumnsType } from 'antd/es/table'
+import { Table } from 'antd'
+import dayjs from 'dayjs'
+import useIdentificationDelete from '../hooks/useIdentificationDelete'
+
+interface DataType {
+  key: React.Key
+  nameThai: JSX.Element
+  nameEng: JSX.Element
+  age: number
+  id_number: string
+  description: JSX.Element
+  x: string
+}
 
 const Search = () => {
-  const { userData } = useIdentificationGet()
+  const { userData, fetchData } = useIdentificationGet()
   const [pageSize, setPageSize] = useState<number>(10)
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [form] = Form.useForm()
@@ -13,8 +26,29 @@ const Search = () => {
   const [searchField, setSearchField] = useState<string>('')
   const [searchType, setSearchType] = useState<string>('')
   const [isFilteredUserData, setIsFilteredUserData] = useState<boolean>(false)
+  const { SubmitDelete } = useIdentificationDelete()
+  //const [idNumber, setIdNumber] = useState<string>('')
 
-  const onFinish = (values: any) => {
+  const columns: ColumnsType<DataType> = [
+    { title: 'ชื่อ-สกุล', dataIndex: 'nameThai', key: 'nameThai' },
+    { title: 'Name-Surename', dataIndex: 'nameEng', key: 'nameEng' },
+    {
+      title: 'Age',
+      dataIndex: 'age',
+      key: 'age',
+      sorter: (a, b) => a.age - b.age,
+      sortDirections: ['descend', 'ascend'],
+    },
+    { title: 'เลขบัตรประจำตัวประชาชน', dataIndex: 'id_number', key: 'id_number' },
+    {
+      title: 'คำสั่ง',
+      dataIndex: 'x',
+    },
+  ]
+
+  const onFinish = (
+    values: any, // eslint-disable-line
+  ) => {
     setSearchField(values.search)
     setSearchType(values.search_type)
     setIsFilteredUserData(true)
@@ -39,6 +73,14 @@ const Search = () => {
     console.log(pageSize)
   }
 
+  const onDelete = async (id_number: string) => {
+    try {
+      await SubmitDelete(id_number)
+      await fetchData()
+    } catch (error) {
+      console.error('Error delete data', error)
+    }
+  }
   const filteredUserData =
     userData &&
     userData.filter((data) =>
@@ -80,15 +122,100 @@ const Search = () => {
       </div>
 
       <div className={classes.container}>
-        {isFilteredUserData
-          ? filteredUserData &&
-            filteredUserData.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((data) => {
-              return <UserInfomation key={data.id} userInfo={data} />
-            })
-          : userData &&
-            userData.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((data) => {
-              return <UserInfomation key={data.id} userInfo={data} />
-            })}
+        <Table
+          columns={columns}
+          pagination={false}
+          className={classes.table}
+          expandable={{
+            expandedRowRender: (record) => <p style={{ margin: 0 }}>{record.description}</p>,
+          }}
+          dataSource={
+            isFilteredUserData
+              ? filteredUserData &&
+                filteredUserData.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((data) => {
+                  return {
+                    key: data.id,
+                    nameThai: (
+                      <div>
+                        {data.name_thai} {data.surename_thai}
+                      </div>
+                    ),
+                    nameEng: (
+                      <div>
+                        {data.name_eng} {data.surename_eng}
+                      </div>
+                    ),
+                    age: Number(dayjs().format('YYYY')) - Number(dayjs(data.date_of_birth).format('YYYY')),
+                    id_number: data.identification_number,
+                    description: (
+                      <div className={classes.detailContainer}>
+                        <p>เลขบัตรประชาชน : {data.identification_number}</p>
+                        <p>
+                          ชื่อและสกุล : {data.title_thai} {data.name_thai} {data.surename_thai}
+                        </p>
+                        <p>
+                          Name : {data.title_eng} {data.name_eng} {data.surename_eng}
+                        </p>
+                        <p>Date of Birth: {dayjs(data.date_of_birth).format('DD/MM/YYYY')}</p>
+                        <p>เกิดวันที่ : {dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}</p>
+                        <p>
+                          อายุ : {Number(dayjs().format('YYYY')) - Number(dayjs(data.date_of_birth).format('YYYY'))} ปี
+                        </p>
+                        <p>ศาสนา : {data.religion}</p>
+                        <p>ที่อยู่ : {data.address}</p>
+                        <p>Date of Issue : {dayjs(data.date_of_birth).format('DD/MM/YYYY')}</p>
+                        <p>วันที่ออกบัตร : {dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}</p>
+                        <p>Date of Expiry : {dayjs(data.date_of_birth).format('DD/MM/YYYY')}</p>
+                        <p>วันบัตรหมดอายุ : {dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}</p>
+                      </div>
+                    ),
+                    x: <Button onClick={() => onDelete(data.identification_number)}>ลบ</Button>,
+                  }
+                })
+              : userData &&
+                userData.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((data) => {
+                  return {
+                    key: data.id,
+                    nameThai: (
+                      <div>
+                        {data.name_thai} {data.surename_thai}
+                      </div>
+                    ),
+                    nameEng: (
+                      <div>
+                        {data.name_eng} {data.surename_eng}
+                      </div>
+                    ),
+                    age: Number(dayjs().format('YYYY')) - Number(dayjs(data.date_of_birth).format('YYYY')),
+                    id_number: data.identification_number,
+                    description: (
+                      <div className={classes.detailContainer}>
+                        <p>เลขบัตรประชาชน : {data.identification_number}</p>
+                        <p>
+                          ชื่อและสกุล : {data.title_thai} {data.name_thai} {data.surename_thai}
+                        </p>
+                        <p>
+                          Name : {data.title_eng} {data.name_eng} {data.surename_eng}
+                        </p>
+                        <p>Date of Birth: {dayjs(data.date_of_birth).format('DD/MM/YYYY')}</p>
+                        <p>เกิดวันที่ : {dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}</p>
+                        <p>
+                          อายุ : {Number(dayjs().format('YYYY')) - Number(dayjs(data.date_of_birth).format('YYYY'))} ปี
+                        </p>
+                        <p>ศาสนา : {data.religion}</p>
+                        <p>ที่อยู่ : {data.address}</p>
+                        <p>Date of Issue : {dayjs(data.date_of_birth).format('DD/MM/YYYY')}</p>
+                        <p>วันที่ออกบัตร : {dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}</p>
+                        <p>Date of Expiry : {dayjs(data.date_of_birth).format('DD/MM/YYYY')}</p>
+                        <p>วันบัตรหมดอายุ : {dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}</p>
+                      </div>
+                    ),
+                    x: <Button onClick={() => onDelete(data.identification_number)}>ลบ</Button>,
+                  }
+                })
+          }
+        />
+
         <Pagination
           className={classes.pagination}
           showSizeChanger

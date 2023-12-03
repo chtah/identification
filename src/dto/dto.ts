@@ -16,3 +16,7 @@ export interface IdentifictionDto {
   date_of_expiry: Date
   date_of_expiry_buddhist: Date
 }
+
+export interface IdentifictionNumberDto {
+  identification_number: string
+}
