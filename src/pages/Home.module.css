@@ -1,0 +1,19 @@
+.container {
+  padding: 40px;
+  background-color: #fff;
+  width: 50%;
+  margin: auto;
+
+  border-radius: 40px;
+}
+
+.title {
+  color: #70727b;
+  text-align: center;
+  font-size: 20px;
+  margin: 0 0 40px 0;
+}
+
+.containerForm {
+  margin: auto;
+}

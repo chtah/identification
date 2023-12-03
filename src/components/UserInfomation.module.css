@@ -1,0 +1,28 @@
+.container {
+  width: 50%;
+  margin: auto;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 5px;
+  background-color: #fff;
+  width: 80%;
+  margin: auto;
+  border-radius: 15px;
+}
+
+.nameThai {
+  display: flex;
+  gap: 20px;
+}
+
+.nameEng {
+  display: flex;
+  gap: 20px;
+}
+
+.detailContainer {
+  display: grid;
+}

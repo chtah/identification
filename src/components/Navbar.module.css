@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap');
+
+.container {
+  display: flex;
+  background-color: #fff;
+  padding: 20px;
+  gap: 33.33%;
+  margin: 0 0 30px 0;
+}
+
+.logo {
+  font-weight: 600;
+  color: #70727b;
+  font-size: 18px;
+}
+
+.menuContainer {
+  display: flex;
+  justify-content: center;
+
+  gap: 50px;
+}
+
+.navMenu {
+  position: relative;
+  font-weight: 600;
+  color: #70727b;
+  font-size: 18px;
+}
+
+.rectangle {
+  position: absolute;
+  margin-top: 2px;
+  height: 5px;
+  width: 0; /* Set initial width to zero */
+  background-color: #4e9aff;
+  border-radius: 2.5px;
+  transition: all 0.3s ease-in-out; /* Add this line for a smooth transition */
+}
+
+.inActive .rectangle {
+  visibility: hidden;
+  width: 0; /* Ensure the width is zero when not active */
+}
+
+.active .rectangle {
+  visibility: visible;
+  width: 100%; /* Set the width to 100% when active */
+}
+
+/* Add the following rule to show the rectangle on hover */
+.navMenu:hover .rectangle {
+  width: 100%; /* Set the width to 100% when hovering */
+  visibility: visible;
+}

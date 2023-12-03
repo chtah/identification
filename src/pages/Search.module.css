@@ -1,0 +1,31 @@
+.containerSearch {
+  display: flex;
+  justify-content: center;
+  width: 1000px;
+  margin: auto auto 50px auto;
+}
+.form {
+  display: flex;
+  gap: 20px;
+}
+.field {
+  display: flex;
+  gap: 40px;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pagination {
+  margin: 20px 0;
+  display: flex;
+  justify-content: center;
+}
