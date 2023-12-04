@@ -66,7 +66,7 @@ const random30DigitNumber = () => {
   return randomNumber
 }
 
-function randomYears(): number {
+const randomYears = () => {
   const startYear = Number(dayjs().format('YYYY')) - 100
   const endYear = Number(dayjs().format('YYYY')) - 15
   return Math.floor(Math.random() * (endYear - startYear + 1)) + startYear
@@ -77,6 +77,11 @@ const randomDate = () => {
   const randomMonth = random12DigitNumber()
   const randomYear = randomYears()
   return dayjs(`${randomYear}-${randomMonth}-${randomDay}`)
+}
+
+const randomMobile = () => {
+  const randomNumber = '09' + String(Math.floor(10000000 + Math.random() * 90000000))
+  return randomNumber
 }
 
 const randomText = () => {
@@ -127,6 +132,7 @@ export const randomData = () => {
   const randomIssue = randomDate()
   const randomExpiry = randomDate()
   const randomAddress = randomText()
+  const randomMobilePhone = randomMobile()
 
   return {
     randomIdentification,
@@ -141,5 +147,6 @@ export const randomData = () => {
     randomIssue,
     randomExpiry,
     randomAddress,
+    randomMobilePhone,
   }
 }

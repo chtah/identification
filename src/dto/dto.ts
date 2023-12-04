@@ -15,6 +15,7 @@ export interface IdentifictionDto {
   date_of_issue_buddhist: Date
   date_of_expiry: Date
   date_of_expiry_buddhist: Date
+  mobile_phone: string | null
 }
 
 export interface IdentifictionNumberDto {

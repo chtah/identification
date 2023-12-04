@@ -1,4 +1,4 @@
-import { Button, Form, Space, Input, Select, Pagination, Card, QRCode } from 'antd'
+import { Button, Form, Space, Input, Select, Pagination, Card, QRCode, Descriptions } from 'antd'
 import classes from './Search.module.css'
 import { useState } from 'react'
 import type { ColumnsType } from 'antd/es/table'
@@ -127,6 +127,16 @@ const Search = () => {
       </div>
 
       <div className={classes.container}>
+        <p className={classes.count}>
+          Total Found :{' '}
+          {searchType === 'id_number'
+            ? userDataSearchId !== null
+              ? userDataSearchId.length
+              : 0
+            : userDataSearchName !== null
+            ? userDataSearchName.length
+            : 0}
+        </p>
         <Table
           columns={columns}
           pagination={false}
@@ -153,28 +163,82 @@ const Search = () => {
                     age: Number(dayjs().format('YYYY')) - Number(dayjs(data.date_of_birth).format('YYYY')),
                     id_number: data.identification_number,
                     description: (
-                      <Card title="ข้อมูลเพิ่มเติม" style={{ width: 700, margin: 'auto' }}>
+                      <Card title="ข้อมูลเพิ่มเติม" style={{ width: '80%', margin: 'auto' }}>
                         <div className={classes.containerData}>
-                          <div>
-                            <p>เลขบัตรประชาชน : {data.identification_number}</p>
-                            <p>
-                              ชื่อและสกุล : {data.title_thai} {data.name_thai} {data.surename_thai}
-                            </p>
-                            <p>
-                              Name : {data.title_eng} {data.name_eng} {data.surename_eng}
-                            </p>
-                            <p>Date of Birth: {dayjs(data.date_of_birth).format('DD/MM/YYYY')}</p>
-                            <p>เกิดวันที่ : {dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}</p>
-                            <p>
-                              อายุ : {Number(dayjs().format('YYYY')) - Number(dayjs(data.date_of_birth).format('YYYY'))}{' '}
-                              ปี
-                            </p>
-                            <p>ศาสนา : {data.religion}</p>
-                            <p>ที่อยู่ : {data.address}</p>
-                            <p>Date of Issue : {dayjs(data.date_of_birth).format('DD/MM/YYYY')}</p>
-                            <p>วันที่ออกบัตร : {dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}</p>
-                            <p>Date of Expiry : {dayjs(data.date_of_birth).format('DD/MM/YYYY')}</p>
-                            <p>วันบัตรหมดอายุ : {dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}</p>
+                          <div className={classes.dataLeft}>
+                            <Descriptions
+                              bordered
+                              size="small"
+                              items={[
+                                {
+                                  label: 'เลขบัตรประชาชน',
+                                  children: `${data.identification_number}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'ชื่อและสกุล',
+                                  children: `${data.title_thai} ${data.name_thai} ${data.surename_thai}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'Name',
+                                  children: `${data.title_eng} ${data.name_eng} ${data.surename_eng}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'Date of Birth',
+                                  children: `${dayjs(data.date_of_birth).format('DD/MM/YYYY')}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'เกิดวันที่',
+                                  children: `${dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'อายุ',
+                                  children: `${
+                                    Number(dayjs().format('YYYY')) - Number(dayjs(data.date_of_birth).format('YYYY'))
+                                  } ปี`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'ศาสนา',
+                                  children: `${data.religion}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'ที่อยู่',
+                                  children: `${data.address}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'Date of Issue',
+                                  children: `${dayjs(data.date_of_birth).format('DD/MM/YYYY')}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'วันที่ออกบัตร',
+                                  children: `${dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'Date of Expiry',
+                                  children: `${dayjs(data.date_of_birth).format('DD/MM/YYYY')}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'วันบัตรหมดอายุ',
+                                  children: `${dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'เบอร์โทรศัพท์',
+                                  children: `${data.mobile_phone !== '' ? data.mobile_phone : 'ไม่มี'}`,
+                                  span: 5,
+                                },
+                              ]}
+                            />
                           </div>
                           <div className={classes.dataRight}>
                             <QRCode value={`${data.title_eng} ${data.name_eng} ${data.surename_eng}`} />
@@ -206,31 +270,98 @@ const Search = () => {
                     age: Number(dayjs().format('YYYY')) - Number(dayjs(data.date_of_birth).format('YYYY')),
                     id_number: data.identification_number,
                     description: (
-                      <Card title="ข้อมูลเพิ่มเติม" style={{ width: 700, margin: 'auto' }}>
+                      <Card title="ข้อมูลเพิ่มเติม" style={{ width: '80%', margin: 'auto' }}>
                         <div className={classes.containerData}>
-                          <div>
-                            <p>เลขบัตรประชาชน : {data.identification_number}</p>
-                            <p>
-                              ชื่อและสกุล : {data.title_thai} {data.name_thai} {data.surename_thai}
-                            </p>
-                            <p>
-                              Name : {data.title_eng} {data.name_eng} {data.surename_eng}
-                            </p>
-                            <p>Date of Birth: {dayjs(data.date_of_birth).format('DD/MM/YYYY')}</p>
-                            <p>เกิดวันที่ : {dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}</p>
-                            <p>
-                              อายุ : {Number(dayjs().format('YYYY')) - Number(dayjs(data.date_of_birth).format('YYYY'))}{' '}
-                              ปี
-                            </p>
-                            <p>ศาสนา : {data.religion}</p>
-                            <p>ที่อยู่ : {data.address}</p>
-                            <p>Date of Issue : {dayjs(data.date_of_birth).format('DD/MM/YYYY')}</p>
-                            <p>วันที่ออกบัตร : {dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}</p>
-                            <p>Date of Expiry : {dayjs(data.date_of_birth).format('DD/MM/YYYY')}</p>
-                            <p>วันบัตรหมดอายุ : {dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}</p>
+                          <div className={classes.dataLeft}>
+                            <Descriptions
+                              bordered
+                              size="small"
+                              items={[
+                                {
+                                  label: 'เลขบัตรประชาชน',
+                                  children: `${data.identification_number}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'ชื่อและสกุล',
+                                  children: `${data.title_thai} ${data.name_thai} ${data.surename_thai}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'Name',
+                                  children: `${data.title_eng} ${data.name_eng} ${data.surename_eng}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'Date of Birth',
+                                  children: `${dayjs(data.date_of_birth).format('DD/MM/YYYY')}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'เกิดวันที่',
+                                  children: `${dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'อายุ',
+                                  children: `${
+                                    Number(dayjs().format('YYYY')) - Number(dayjs(data.date_of_birth).format('YYYY'))
+                                  } ปี`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'ศาสนา',
+                                  children: `${data.religion}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'ที่อยู่',
+                                  children: `${data.address}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'Date of Issue',
+                                  children: `${dayjs(data.date_of_birth).format('DD/MM/YYYY')}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'วันที่ออกบัตร',
+                                  children: `${dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'Date of Expiry',
+                                  children: `${dayjs(data.date_of_birth).format('DD/MM/YYYY')}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'วันบัตรหมดอายุ',
+                                  children: `${dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}`,
+                                  span: 5,
+                                },
+                                {
+                                  label: 'เบอร์โทรศัพท์',
+                                  children: `${data.mobile_phone !== '' ? data.mobile_phone : 'ไม่มี'}`,
+                                  span: 5,
+                                },
+                              ]}
+                            />
                           </div>
                           <div className={classes.dataRight}>
-                            <QRCode value={`${data.title_eng} ${data.name_eng} ${data.surename_eng}`} />
+                            <>
+                              <p style={{ textAlign: 'center', marginBottom: '5px' }}>Your vCard</p>
+                              <QRCode
+                                value={`
+BEGIN:VCARD
+VERSION:3.0
+FN;CHARSET=UTF-8:${data.name_eng} ${data.surename_eng}
+N;CHARSET=UTF-8:${data.surename_eng};${data.name_eng};;;
+BDAY:${dayjs(data.date_of_birth).format('YYYYMMDD')}
+TEL;TYPE=CELL:${data.mobile_phone}
+END:VCARD`}
+                                size={250}
+                              />
+                            </>
                           </div>
                         </div>
                       </Card>

@@ -1,10 +1,12 @@
 import classes from './Home.module.css'
-import { Button, Form, Input, Select, Space, DatePicker } from 'antd'
+import { Button, Form, Input, Select, Space, DatePicker, Tooltip } from 'antd'
 import useIdentificationCreate from '../hooks/useIdentificationCreate'
 import { Toaster } from 'react-hot-toast'
 import { randomData } from '../const'
 import useIdentificationGet from '../hooks/useIdentificationGet'
 import CountUp from 'react-countup'
+import { InfoCircleOutlined } from '@ant-design/icons'
+import dayjs from 'dayjs'
 
 const { Option } = Select
 
@@ -31,6 +33,7 @@ const Home = () => {
       randomIssue,
       randomExpiry,
       randomAddress,
+      randomMobilePhone,
     } = randomData()
 
     form.setFieldsValue({
@@ -46,6 +49,7 @@ const Home = () => {
       address: randomAddress,
       date_of_issue: randomIssue,
       date_of_expiry: randomExpiry,
+      mobile_phone: randomMobilePhone,
     })
   }
 
@@ -60,6 +64,7 @@ const Home = () => {
       date_of_issue: ISOFormatIssueDate,
       date_of_expiry: ISOFormatExpiryDate,
     }
+
     const userData = { ...values, ...allDate }
     console.log(userData)
     try {
@@ -206,7 +211,19 @@ const Home = () => {
           <Form.Item label="วันเกิด (Birthday)">
             <Form.Item
               name="date_of_birth"
-              rules={[{ type: 'object' as const, required: true, message: 'กรุณาเลือกวันเกิด' }]}
+              rules={[
+                { type: 'object' as const, required: true, message: 'กรุณาเลือกวันเกิด' },
+                () => ({
+                  validator(_, value) {
+                    if (dayjs(value).valueOf() <= dayjs().valueOf()) {
+                      console.log(dayjs(value).valueOf())
+                      console.log(dayjs().valueOf())
+                      return Promise.resolve()
+                    }
+                    return Promise.reject(new Error('วันเกิดไม่ถูกต้อง'))
+                  },
+                }),
+              ]}
               noStyle
             >
               <DatePicker placeholder="วันเกิด" />
@@ -227,7 +244,7 @@ const Home = () => {
 
           <Form.Item label="ที่อยู่ (Address)">
             <Space.Compact>
-              <Form.Item name="address" noStyle rules={[{ required: true, message: 'กรุฯาใส่ที่อยู่' }]}>
+              <Form.Item name="address" noStyle rules={[{ required: true, message: 'กรุณาใส่ที่อยู่' }]}>
                 <Input style={{ width: '500px' }} placeholder="ที่อยู่" />
               </Form.Item>
             </Space.Compact>
@@ -251,6 +268,31 @@ const Home = () => {
             >
               <DatePicker placeholder="วันบัตรหมดอายุ" />
             </Form.Item>
+          </Form.Item>
+
+          <Form.Item label="เบอร์โทรศัพท์ (Mobile Phone)">
+            <Space.Compact>
+              <Form.Item
+                name="mobile_phone"
+                noStyle
+                rules={[
+                  { required: false },
+                  () => ({
+                    validator(_, value) {
+                      if ((/^[0-9]+$/.test(value) && value.length === 10) || value.length === 0) {
+                        return Promise.resolve()
+                      }
+                      return Promise.reject(new Error('กรุณาใช้ 0-9 จำนวน 10 หลัก'))
+                    },
+                  }),
+                ]}
+              >
+                <Input style={{ width: '160px' }} placeholder="(Optional)" />
+              </Form.Item>
+              <Tooltip title="Optional for create vCard" color="blue">
+                <InfoCircleOutlined style={{ marginLeft: '10px' }} />
+              </Tooltip>
+            </Space.Compact>
           </Form.Item>
 
           <Form.Item label=" " colon={false}>
