@@ -214,22 +214,22 @@ const Search = () => {
                                 },
                                 {
                                   label: 'Date of Issue',
-                                  children: `${dayjs(data.date_of_birth).format('DD/MM/YYYY')}`,
+                                  children: `${dayjs(data.date_of_issue).format('DD/MM/YYYY')}`,
                                   span: 5,
                                 },
                                 {
                                   label: 'วันที่ออกบัตร',
-                                  children: `${dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}`,
+                                  children: `${dayjs(data.date_of_issue_buddhist).format('DD/MM/YYYY')}`,
                                   span: 5,
                                 },
                                 {
                                   label: 'Date of Expiry',
-                                  children: `${dayjs(data.date_of_birth).format('DD/MM/YYYY')}`,
+                                  children: `${dayjs(data.date_of_expiry).format('DD/MM/YYYY')}`,
                                   span: 5,
                                 },
                                 {
                                   label: 'วันบัตรหมดอายุ',
-                                  children: `${dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}`,
+                                  children: `${dayjs(data.date_of_expiry_buddhist).format('DD/MM/YYYY')}`,
                                   span: 5,
                                 },
                                 {
@@ -321,22 +321,22 @@ const Search = () => {
                                 },
                                 {
                                   label: 'Date of Issue',
-                                  children: `${dayjs(data.date_of_birth).format('DD/MM/YYYY')}`,
+                                  children: `${dayjs(data.date_of_issue).format('DD/MM/YYYY')}`,
                                   span: 5,
                                 },
                                 {
                                   label: 'วันที่ออกบัตร',
-                                  children: `${dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}`,
+                                  children: `${dayjs(data.date_of_issue_buddhist).format('DD/MM/YYYY')}`,
                                   span: 5,
                                 },
                                 {
                                   label: 'Date of Expiry',
-                                  children: `${dayjs(data.date_of_birth).format('DD/MM/YYYY')}`,
+                                  children: `${dayjs(data.date_of_expiry).format('DD/MM/YYYY')}`,
                                   span: 5,
                                 },
                                 {
                                   label: 'วันบัตรหมดอายุ',
-                                  children: `${dayjs(data.date_of_birth_buddhist).format('DD/MM/YYYY')}`,
+                                  children: `${dayjs(data.date_of_expiry_buddhist).format('DD/MM/YYYY')}`,
                                   span: 5,
                                 },
                                 {
