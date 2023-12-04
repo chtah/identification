@@ -10,7 +10,7 @@ const useIdentificationDelete = () => {
     setIsLodingButton(true)
 
     const notifySubmit = () => {
-      toast.success('Submitted Infomation', { position: 'top-center', duration: 2000 })
+      toast.success('Deleted', { position: 'top-center', duration: 1500 })
     }
 
     const notifyNoIdNumber = () => {

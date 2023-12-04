@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 
 const titleThai = ['นาย', 'นาง', 'นางสาว']
-const nameThai = ['สุรยุทธ์', 'ปิติภูมิ', 'วริศ', 'บดินทร์', 'ชาลี', 'กรภัทร', 'นนทิน', 'ธนาทิพย์', 'ภาวิดา ', 'ชุติมา']
+const nameThai = ['สุรยุทธ์', 'ปิติภูมิ', 'วริศ', 'บดินทร์', 'ชาลี', 'กรภัทร', 'นนทิน', 'ธนาทิพย์', 'ภาวิดา', 'ชุติมา']
 const surenameThai = [
   'ธรรมวงศ์',
   'เจริญทิพย์',
@@ -67,8 +67,8 @@ const random30DigitNumber = () => {
 }
 
 function randomYears(): number {
-  const startYear = 1920
-  const endYear = 2023
+  const startYear = Number(dayjs().format('YYYY')) - 100
+  const endYear = Number(dayjs().format('YYYY')) - 15
   return Math.floor(Math.random() * (endYear - startYear + 1)) + startYear
 }
 

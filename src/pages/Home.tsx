@@ -13,26 +13,26 @@ const Home = () => {
   const [form] = Form.useForm()
   const { userData, fetchData } = useIdentificationGet()
 
-  const {
-    randomIdentification,
-    randomTitleThai,
-    randomTitleEnglish,
-    randomNameThai,
-    randomNameEnglish,
-    randomSurenameThai,
-    randomSurenameEnglish,
-    randomReligion,
-    randomBirthDay,
-    randomIssue,
-    randomExpiry,
-    randomAddress,
-  } = randomData()
-
   const onReset = () => {
     form.resetFields()
   }
 
   const onFill = () => {
+    const {
+      randomIdentification,
+      randomTitleThai,
+      randomTitleEnglish,
+      randomNameThai,
+      randomNameEnglish,
+      randomSurenameThai,
+      randomSurenameEnglish,
+      randomReligion,
+      randomBirthDay,
+      randomIssue,
+      randomExpiry,
+      randomAddress,
+    } = randomData()
+
     form.setFieldsValue({
       identification_number: randomIdentification,
       title_thai: randomTitleThai,
@@ -120,10 +120,38 @@ const Home = () => {
                   <Option value="นาง">นาง</Option>
                 </Select>
               </Form.Item>
-              <Form.Item name="name_thai" noStyle rules={[{ required: true, message: 'กรุณาใส่ชื่อ' }]}>
+              <Form.Item
+                name="name_thai"
+                noStyle
+                rules={[
+                  { required: true, message: 'กรุณาใส่ชื่อ' },
+                  () => ({
+                    validator(_, value) {
+                      if (/^[ก-๙]+$/.test(value)) {
+                        return Promise.resolve()
+                      }
+                      return Promise.reject(new Error('กรุณาใช้ ก-ฮ'))
+                    },
+                  }),
+                ]}
+              >
                 <Input style={{ width: '200px' }} placeholder="ชื่อ" />
               </Form.Item>
-              <Form.Item name="surename_thai" noStyle rules={[{ required: true, message: 'กรุณาใส่นามสกุล' }]}>
+              <Form.Item
+                name="surename_thai"
+                noStyle
+                rules={[
+                  { required: true, message: 'กรุณาใส่นามสกุล' },
+                  () => ({
+                    validator(_, value) {
+                      if (/^[ก-๙]+$/.test(value)) {
+                        return Promise.resolve()
+                      }
+                      return Promise.reject(new Error('กรุณาใช้ ก-ฮ'))
+                    },
+                  }),
+                ]}
+              >
                 <Input style={{ width: '200px' }} placeholder="นามสกุล" />
               </Form.Item>
             </Space.Compact>
@@ -138,10 +166,38 @@ const Home = () => {
                   <Option value="Mrs.">Mrs.</Option>
                 </Select>
               </Form.Item>
-              <Form.Item name="name_eng" noStyle rules={[{ required: true, message: 'กรุณาใส่ชื่อภาษาอังกฤษ' }]}>
+              <Form.Item
+                name="name_eng"
+                noStyle
+                rules={[
+                  { required: true, message: 'กรุณาใส่ชื่อภาษาอังกฤษ' },
+                  () => ({
+                    validator(_, value) {
+                      if (/^[A-Za-z]+$/.test(value)) {
+                        return Promise.resolve()
+                      }
+                      return Promise.reject(new Error('Only use A-Z or a-z'))
+                    },
+                  }),
+                ]}
+              >
                 <Input style={{ width: '200px' }} placeholder="Name" />
               </Form.Item>
-              <Form.Item name="surename_eng" noStyle rules={[{ required: true, message: 'กรุณาใส่นามสกุลภาษาอังกฤษ' }]}>
+              <Form.Item
+                name="surename_eng"
+                noStyle
+                rules={[
+                  { required: true, message: 'กรุณาใส่นามสกุลภาษาอังกฤษ' },
+                  () => ({
+                    validator(_, value) {
+                      if (/^[A-Za-z]+$/.test(value)) {
+                        return Promise.resolve()
+                      }
+                      return Promise.reject(new Error('Only use A-Z or a-z'))
+                    },
+                  }),
+                ]}
+              >
                 <Input style={{ width: '200px' }} placeholder="Surename" />
               </Form.Item>
             </Space.Compact>
@@ -207,6 +263,9 @@ const Home = () => {
               style={{ color: '#fff', backgroundColor: '#9ADE7B', marginLeft: '20px' }}
             >
               Generate
+            </Button>
+            <Button type="primary" danger htmlType="button" onClick={onReset} style={{ marginLeft: '20px' }}>
+              Clear
             </Button>
           </Form.Item>
         </Form>
