@@ -6,6 +6,7 @@
   margin: auto;
 
   border-radius: 40px;
+  box-shadow: 0 0 10px 5px rgb(0 0 0 / 0.05);
 }
 
 .title {
