@@ -1,13 +1,12 @@
+import useIdentificationGet from '../hooks/useIdentificationGet'
 import { Button, Form, Space, Input, Select, Pagination, Card, QRCode } from 'antd'
-import classes from './Search.module.css'
+import classes from './All.module.css'
 import { useState } from 'react'
 import type { ColumnsType } from 'antd/es/table'
 import { Table } from 'antd'
 import dayjs from 'dayjs'
 import useIdentificationDelete from '../hooks/useIdentificationDelete'
 import { Toaster } from 'react-hot-toast'
-import useSearchByIdGet from '../hooks/useSearchByIdGet'
-import useSearchByNameGet from '../hooks/useSearchByNameGet'
 
 interface DataType {
   key: React.Key
@@ -19,16 +18,15 @@ interface DataType {
   delete: string
 }
 
-const Search = () => {
-  const { userDataSearchId, SubmitSearchId } = useSearchByIdGet()
-  const { userDataSearchName, SubmitSearchName } = useSearchByNameGet()
+const All = () => {
+  const { userData, fetchData } = useIdentificationGet()
   const [pageSize, setPageSize] = useState<number>(10)
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [form] = Form.useForm()
   const { Option } = Select
-  const [searchType, setSearchType] = useState<string>('')
   const [searchField, setSearchField] = useState<string>('')
-
+  const [searchType, setSearchType] = useState<string>('')
+  const [isFilteredUserData, setIsFilteredUserData] = useState<boolean>(false)
   const { SubmitDelete } = useIdentificationDelete()
   //const [idNumber, setIdNumber] = useState<string>('')
 
@@ -49,24 +47,17 @@ const Search = () => {
     },
   ]
 
-  const onFinish = async (
+  const onFinish = (
     values: any, // eslint-disable-line
   ) => {
-    try {
-      setSearchType(values.search_type)
-      setSearchField(values.search)
-      if (values.search_type === 'id_number') {
-        await SubmitSearchId(values.search)
-      } else {
-        await SubmitSearchName(values.search)
-      }
-    } catch (error) {
-      console.log(error)
-    }
+    setSearchField(values.search)
+    setSearchType(values.search_type)
+    setIsFilteredUserData(true)
   }
 
   const onReset = () => {
     form.resetFields()
+    setIsFilteredUserData(false)
   }
 
   const onShowSizeChange = (current: number, pageSize: number) => {
@@ -86,15 +77,21 @@ const Search = () => {
   const onDelete = async (id_number: string) => {
     try {
       await SubmitDelete(id_number)
-      if (searchType === 'id_number') {
-        await SubmitSearchId(searchField)
-      } else {
-        await SubmitSearchName(searchField)
-      }
+      await fetchData()
     } catch (error) {
       console.error('Error delete data', error)
     }
   }
+  const filteredUserData =
+    userData &&
+    userData.filter((data) =>
+      searchType === 'id_number'
+        ? data.identification_number.includes(searchField)
+        : data.name_thai.toLocaleLowerCase().includes(searchField.toLocaleLowerCase()) ||
+          data.name_eng.toLocaleLowerCase().includes(searchField.toLocaleLowerCase()) ||
+          data.surename_thai.toLocaleLowerCase().includes(searchField.toLocaleLowerCase()) ||
+          data.surename_eng.toLocaleLowerCase().includes(searchField.toLocaleLowerCase()),
+    )
 
   return (
     <>
@@ -135,9 +132,9 @@ const Search = () => {
             expandedRowRender: (record) => <p style={{ margin: 0 }}>{record.description}</p>,
           }}
           dataSource={
-            searchType === 'id_number'
-              ? userDataSearchId &&
-                userDataSearchId.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((data) => {
+            isFilteredUserData
+              ? filteredUserData &&
+                filteredUserData.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((data) => {
                   return {
                     key: data.id,
                     nameThai: (
@@ -189,8 +186,8 @@ const Search = () => {
                     ),
                   }
                 })
-              : userDataSearchName &&
-                userDataSearchName.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((data) => {
+              : userData &&
+                userData.slice((currentPage - 1) * pageSize, currentPage * pageSize).map((data) => {
                   return {
                     key: data.id,
                     nameThai: (
@@ -251,18 +248,10 @@ const Search = () => {
           onShowSizeChange={onShowSizeChange}
           onChange={onPageChange}
           defaultCurrent={1}
-          total={
-            searchType === 'id_number'
-              ? userDataSearchId !== null
-                ? userDataSearchId.length
-                : 1
-              : userDataSearchName !== null
-              ? userDataSearchName.length
-              : 1
-          }
+          total={userData !== null ? userData.length : 500}
         />
       </div>
     </>
   )
 }
-export default Search
+export default All

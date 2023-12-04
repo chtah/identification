@@ -16,6 +16,12 @@ const Navbar = () => {
             </div>
           </NavLink>
 
+          <NavLink to="/all" className={({ isActive }) => (isActive ? classes.active : classes.inActive)}>
+            <span className={`font-mon font-medium ${classes.navMenu}`}>
+              All<div className={classes.rectangle}></div>
+            </span>
+          </NavLink>
+
           <NavLink to="/search" className={({ isActive }) => (isActive ? classes.active : classes.inActive)}>
             <span className={`font-mon font-medium ${classes.navMenu}`}>
               Search<div className={classes.rectangle}></div>

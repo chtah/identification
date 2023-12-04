@@ -10,7 +10,7 @@ const useIdentificationCreate = () => {
     setIsLodingButton(true)
 
     const notifySubmit = () => {
-      toast.success('Submitted Infomation', { position: 'top-center', duration: 2000 })
+      toast.success('Submitted', { position: 'top-center', duration: 2000 })
     }
 
     const notifyDuplicate = () => {

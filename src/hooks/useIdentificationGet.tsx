@@ -9,7 +9,6 @@ const useIdentificationGet = () => {
     try {
       const res = await axios.get<IdentifictionDto[]>(`http://localhost:8080/identification/getAll/`)
       setUserData(res.data)
-      console.log(res.data)
     } catch (err) {
       console.error(err)
     }
